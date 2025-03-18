@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
 
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+Route::get('/catalog', [ProductController::class, 'index'])->name('catalog');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product');
+Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('/process-checkout', [CheckoutController::class, 'process'])->name('process_checkout');
 
 Route::get('/', function () {
     return view('welcome');
