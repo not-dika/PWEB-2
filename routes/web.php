@@ -2,17 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomepageController;
 
-Route::get('/catalog', [ProductController::class, 'index'])->name('catalog');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product');
-Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('/process-checkout', [CheckoutController::class, 'process'])->name('process_checkout');
-
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/',[HomepageController::class,'index']);
+Route::get('products', [HomepageController::class, 'products']);
+Route::get('product/{slug}', [HomepageController::class, 'product']);
+Route::get('categories',[HomepageController::class, 'categories']);
+Route::get('category/{slug}', [HomepageController::class, 'category']);
+Route::get('cart', [HomepageController::class, 'cart']);
+Route::get('checkout', [HomepageController::class, 'checkout']);
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -26,4 +24,4 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
