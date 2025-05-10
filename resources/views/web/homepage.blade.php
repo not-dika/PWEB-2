@@ -4,7 +4,7 @@
       @foreach($categories as $category)
     <div class="col-2">
       <div class="card">
-        <img src="{{ $category['image'] }}" class="card-img-top" alt="...">
+        <img src="{{ $category['image'] ?? 'https://placehold.co/300x300?text=' . urlencode(str_replace(' ', '+', $category['name'])); }}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">{{ $category['name'] }}</h5>
           <p class="card-text">

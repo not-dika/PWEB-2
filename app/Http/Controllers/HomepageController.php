@@ -1,39 +1,66 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Categories;
+
 use Illuminate\Http\Request;
+
+use App\Models\Categories;
 
 class HomepageController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $categories = Categories::all();
-        $title = "homepage";
-        return view('web.homepage', ['categories' => $categories]);
+        
+        return view('web.homepage',[
+            'categories' => $categories,
+            'title'=>'Homepage'
+        ]);
     }
 
-    public function products(){
-        return view('web.products');
+    public function products()
+    {
+        $title = "Products";
+
+        return view('web.products',[
+            'title'=>$title
+        ]);
     }
 
     public function product($slug){
-        return view('web.product', ['slug' => $slug]);
-    }
-    
-    public function categories(){
-        return view('web.categories');
+        return view('web.product', [
+            'slug' => $slug
+        ]);
     }
 
-    public function category($slug){
-        return view('web.category_by_slug', ['slug' => $slug]);
+    public function categories()
+    {
+        return view('web.categories',[
+            'title'=>'Categories'
+        ]);
     }
 
-    public function cart(){
-        return view('web.cart');
+    public function category($slug)
+    {
+        $category = Categories::find($slug);
+
+        return view('web.category_by_slug', [
+            'slug' => $slug, 
+            'category' => $category
+        ]);
     }
-    
-    public function checkout(){
-        return view('web.checkout');
+
+    public function cart()
+    {
+        return view('web.cart',[
+            'title'=>'Cart'
+        ]);
     }
-       
+
+    public function checkout()
+    {
+        return view('web.checkout',[
+            'title'=>'Checkout'
+        ]);
+    }
 }
