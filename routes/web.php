@@ -19,12 +19,11 @@ Route::get('cart', [HomepageController::class, 'cart']);
 Route::get('checkout', [HomepageController::class, 'checkout']);
 
 
-Route::group(['prefix'=>'dashboard'], function(){
-    Route::get('/',[DashboardController::class,'index'])->name('dashboard');
-    Route::resource('categories',ProductCategoryController::class);
+Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('categories', ProductCategoryController::class);
     Route::resource('products', ProductController::class);
-
-})->middleware(['auth', 'verified']);
+});
 
 
 Route::middleware(['auth'])->group(function () {
