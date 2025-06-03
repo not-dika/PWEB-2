@@ -6,10 +6,22 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CustomerAuthController;
+/* use App\Http\Controllers\Api\ProductCategoryController as ProductCategoryControllerApi;
+use App\Http\Controllers\Api\ProductController as ProductControllerApi;
 
+Route::prefix('api')->group(function () {
+    Route::apiResource(
+        '/product-categories',
+        ProductCategoryControllerApi::class
+    )->only('index');
 
+    Route::apiResource(
+        '/products',
+        ProductControllerApi::class
+    )->only('index');
+}); */
 
-//kode baru diubah menjadi seperti ini
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::get('products', [HomepageController::class, 'products']);
 Route::get('product/{slug}', [HomepageController::class, 'product']);
@@ -25,6 +37,17 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::resource('products', ProductController::class);
 });
 
+Route::group(['prefix' => 'customer'], function () {
+    Route::controller(CustomerAuthController::class)->group(function () {
+        Route::group(['middleware' => 'check_customer_login'], function () {
+            Route::get('login', 'login')->name('customer.login');
+            Route::post('login', 'store_login')->name('customer.store_login');
+            Route::get('register', 'register')->name('customer.register');
+            Route::post('register', 'store_register')->name('customer.store_register');
+        });
+        Route::post('logout', 'logout')->name('customer.logout');
+    });
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -34,4 +57,4 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
