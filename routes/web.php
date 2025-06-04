@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ThemeController;
 
 /* use App\Http\Controllers\Api\ProductCategoryController as ProductCategoryControllerApi;
@@ -37,6 +38,7 @@ Route::middleware(['auth', 'verified'])->prefix('dashboard')->group(function () 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', ProductCategoryController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('menu', MenuController::class);
     Route::resource('themes', ThemeController::class);
 });
 
