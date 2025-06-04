@@ -1,7 +1,7 @@
 <x-layouts.app :title="__('Menus')">
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl">Menus</flux:heading>
-        <flux:subheading size="lg" class="mb-6">Manage all menus in the system</flux:subheading>
+        <flux:heading size="xl">Menu</flux:heading>
+        <flux:subheading size="lg" class="mb-6">Manage Menu</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
 
@@ -34,35 +34,37 @@
             <tbody class="text-sm text-black bg-white">
                 @foreach ($menus as $index => $menu)
                     <tr class="border-t">
-                        <td class="px-4 py-2 border">{{ $index + 1 }}</td>
-                        <td class="px-4 py-2 border">{{ $menu->menu_text }}</td>
-                        <td class="px-4 py-2 border">{{ $menu->menu_icon ?? '-' }}</td>
-                        <td class="px-4 py-2 border">{{ $menu->menu_url }}</td>
-                        <td class="px-4 py-2 border">{{ $menu->menu_order }}</td>
-                        <td class="px-4 py-2 border">
+                        <td class="px-4 py-2 border text-center align-middle">{{ $index + 1 }}</td>
+                        <td class="px-4 py-2 border text-center align-middle">{{ $menu->menu_text }}</td>
+                        <td class="px-4 py-2 border text-center align-middle">{{ $menu->menu_icon ?? '-' }}</td>
+                        <td class="px-4 py-2 border text-center align-middle">{{ $menu->menu_url }}</td>
+                        <td class="px-4 py-2 border text-center align-middle">{{ $menu->menu_order }}</td>
+                        <td class="px-4 py-2 border text-center align-middle">
                             <span
-                                class="px-2 py-1 text-xs rounded
-                        {{ $menu->status ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                                class="px-2 py-1 text-xs rounded inline-block {{ $menu->status ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
                                 {{ $menu->status ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td class="px-4 py-2 border">
-                            <flux:dropdown>
-                                <flux:button icon:trailing="chevron-down">Actions</flux:button>
-                                <flux:menu>
-                                    <flux:menu.item icon="pencil" href="{{ route('menu.edit', $menu->id) }}">Edit
-                                    </flux:menu.item>
-                                    <flux:menu.item icon="trash" variant="danger"
-                                        onclick="event.preventDefault(); if(confirm('Are you sure to delete this menu?')) document.getElementById('delete-menu-{{ $menu->id }}').submit();">
-                                        Delete
-                                    </flux:menu.item>
-                                    <form id="delete-menu-{{ $menu->id }}"
-                                        action="{{ route('menu.destroy', $menu->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </flux:menu>
-                            </flux:dropdown>
+                        <td class="px-4 py-2 border text-center align-middle">
+                            <div class="flex justify-center">
+                                <flux:dropdown>
+                                    <flux:button icon:trailing="chevron-down">Actions</flux:button>
+                                    <flux:menu>
+                                        <flux:menu.item icon="pencil" href="{{ route('menu.edit', $menu->id) }}">Edit
+                                        </flux:menu.item>
+                                        <flux:menu.item icon="trash" variant="danger"
+                                            onclick="event.preventDefault(); if(confirm('Are you sure to delete this menu?')) document.getElementById('delete-menu-{{ $menu->id }}').submit();">
+                                            Delete
+                                        </flux:menu.item>
+                                        <form id="delete-menu-{{ $menu->id }}"
+                                            action="{{ route('menu.destroy', $menu->id) }}" method="POST"
+                                            class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
