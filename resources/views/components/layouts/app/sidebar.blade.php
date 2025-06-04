@@ -20,6 +20,8 @@
                     <flux:navlist.item icon="shopping-cart" :href="route('products.index')" :current="request()->routeIs('products.*')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
 
                     <flux:navlist.item icon="list-bullet" :href="route('menu.index')" :current="request()->routeIs('menu.*')" wire:navigate>{{ __('Menu') }}</flux:navlist.item>
+
+                    <flux:navlist.item icon="swatch" :href="route('themes.index')" :current="request()->routeIs('themes.*')" wire:navigate>{{ __('Themes') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
