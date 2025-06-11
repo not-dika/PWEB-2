@@ -1,14 +1,16 @@
 <?php
+
 namespace Database\Factories;
 
-use App\Models\Categories;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Categories;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Categories>
  */
 class CategoriesFactory extends Factory
 {
+    
     protected $model = Categories::class;
 
     /**
@@ -19,11 +21,12 @@ class CategoriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'        => $this->faker->word,
-            'slug'        => $this->faker->slug,
+            'name' => $this->faker->word,
+            'slug' => $this->faker->slug,
             'description' => $this->faker->sentence,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+            // 'image' => $this->faker->imageUrl(640, 480, 'categories', true, 'Faker', true),
         ];
     }
 }

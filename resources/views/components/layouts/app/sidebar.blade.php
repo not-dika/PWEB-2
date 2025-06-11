@@ -15,25 +15,21 @@
                 <flux:navlist.group :heading="__('Menu')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
 
-                    <flux:navlist.item icon="clipboard-document-list" :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>{{ __('Categories') }}</flux:navlist.item>
+                    <flux:navlist.item icon="clipboard-document-list" :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>{{ __('Categories') }}</flux:navlist.item>
 
-                    <flux:navlist.item icon="shopping-cart" :href="route('products.index')" :current="request()->routeIs('products.*')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
-
-                    <flux:navlist.item icon="list-bullet" :href="route('menu.index')" :current="request()->routeIs('menu.*')" wire:navigate>{{ __('Menu') }}</flux:navlist.item>
-
-                    <flux:navlist.item icon="swatch" :href="route('themes.index')" :current="request()->routeIs('themes.*')" wire:navigate>{{ __('Themes') }}</flux:navlist.item>
+                    <flux:navlist.item icon="list-bullet" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
-
+            
 
             <flux:spacer />
 
             <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/not-dika/PWEB-2" target="_blank">
-                {{ __('Repository') }}
+                <flux:navlist.item icon="clipboard-document-check" href="{{ route('themes.index') }}">
+                {{ __('Themes') }}
                 </flux:navlist.item>
 
-                <flux:navlist.item icon="book-open-text" href="https://notdikaworkshop.wordpress.com/blog/" target="_blank">
+                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits">
                 {{ __('Documentation') }}
                 </flux:navlist.item>
             </flux:navlist>

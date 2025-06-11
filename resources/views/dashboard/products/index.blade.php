@@ -20,7 +20,9 @@
     </div>
 
     @if(session()->has('successMessage'))
-        <flux:badge color="lime" class="mb-3 w-full">{{session()->get('successMessage')}}</flux:badge>
+        <div class="mb-3 w-full rounded bg-lime-100 border border-lime-400 text-lime-800 px-4 py-3">
+            {{ session()->get('successMessage') }}
+        </div>
     @endif
 
     <div class="overflow-x-auto">
@@ -37,10 +39,13 @@
                         Name
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Category
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         SKU
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Category
+                        PRICE
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Active
@@ -64,7 +69,7 @@
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
                                 @if($product->image_url)
-                                    <img src="{{ Storage::url($product->image_url) }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
                                 @else
                                     <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded">
                                         <span class="text-gray-500 text-sm">N/A</span>
@@ -79,12 +84,17 @@
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
+                                {{ $product->category ? $product->category->name : 'N/A' }}
+                            </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">
                                 {{ $product->sku }}
                             </p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
-                                {{ $product->category ? $product->category->name : 'N/A' }}
+                                {{ $product->price }}
                             </p>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">

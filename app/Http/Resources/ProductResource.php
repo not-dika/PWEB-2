@@ -7,10 +7,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
 {
-    /** 
-     * Transform the resource into an array. 
-     * 
-     * @return array<string, mixed> 
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
      */
     public $status;
     public $message;

@@ -6,7 +6,9 @@
     </div>
 
     @if(session()->has('successMessage'))
-        <flux:badge color="lime" class="mb-3 w-full">{{session()->get('successMessage')}}</flux:badge>
+        <div class="mb-3 w-full rounded bg-lime-100 border border-lime-400 text-lime-800 px-4 py-3">
+            {{ session()->get('successMessage') }}
+        </div>
     @elseif(session()->has('errorMessage'))
         <flux:badge color="red" class="mb-3 w-full">{{session()->get('errorMessage')}}</flux:badge>
     @endif
@@ -19,9 +21,11 @@
 
         <flux:input label="Slug" name="slug" value="{{ $product->slug }}" class="mb-3" />
 
-        <flux:textarea label="Description" name="description" class="mb-3">{{ $product->description }}</flux:textarea>
-
         <flux:input label="SKU" name="sku" value="{{ $product->sku }}" class="mb-3" />
+
+        <flux:input label="Price" name="price" class="mb-3" value="{{ $product->price }}" />
+
+        <flux:input label="Stock" name="stock" class="mb-3" value="{{ $product->stock }}" />
 
         <flux:select label="Category" name="product_category_id" class="mb-3">
             <option value="">Select Category</option>
@@ -29,6 +33,8 @@
                 <option value="{{ $category->id }}" {{ $product->product_category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
             @endforeach
         </flux:select>
+
+        <flux:textarea label="Description" name="description" class="mb-3">{{ $product->description }}</flux:textarea>
 
         @if($product->image_url)
             <div class="mb-3">
@@ -38,9 +44,9 @@
 
         <flux:input type="file" label="Image" name="image" class="mb-3" />
 
-        <flux:checkbox label="Active" name="is_active" {{ $product->is_active ? 'checked' : '' }} />
+        <flux:checkbox label="Active" class="mb-6" name="is_active" {{ $product->is_active ? 'checked' : '' }} />
 
-        <flux:separator />
+        <flux:separator variant="subtle" />
 
         <div class="mt-4">
             <flux:button type="submit" variant="primary">Update</flux:button>

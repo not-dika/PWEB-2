@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
 use App\Models\Categories;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -13,18 +13,16 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::query()
-            ->when($request->filled('q'), function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->q . '%')
-                      ->orWhere('description', 'like', '%' . $request->q . '%')
-                      ->orWhere('sku', 'like', '%' . $request->q . '%');
-            })
-            ->paginate(10);
+        // Mendapatkan query pencarian
+        $q = $request->get('q', ''); // Menangani parameter pencarian dengan default kosong
 
-        return view('dashboard.products.index', [
-            'products' => $products,
-            'q' => $request->q
-        ]);
+        // Mencari produk berdasarkan nama dan deskripsi jika ada pencarian
+        $products = Product::when($q, function ($query, $q) {
+            return $query->where('name', 'like', "%{$q}%")
+                         ->orWhere('description', 'like', "%{$q}%");
+        })->paginate(10); // Menampilkan hasil produk dengan pagination
+        
+        return view('dashboard.products.index', compact('products', 'q'));
     }
 
     /**
@@ -33,7 +31,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        return view('dashboard.products.create', compact('categories'));
+        return view('dashboard.products.create', compact('categories')); 
     }
 
     /**
@@ -41,14 +39,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input produk
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug',
-            'description' => 'nullable|string',
             'sku' => 'required|string|unique:products,sku',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
-            'image' => 'nullable|image',
-            'is_active' => 'boolean',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Validasi gambar upload
         ]);
 
         if ($validator->fails()) {
@@ -65,6 +65,8 @@ class ProductController extends Controller
         $product->slug = $request->slug;
         $product->description = $request->description;
         $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
         $product->product_category_id = $request->product_category_id;
         $product->is_active = $request->has('is_active') ? $request->is_active : true;
 
@@ -77,8 +79,19 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect()->route('products.index')
-            ->with('successMessage', 'Data Berhasil Disimpan');
+        return redirect()->route('products.index')->with(
+            [
+                'success' => 'Produk berhasil ditambahkan.'
+            ]
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
@@ -104,8 +117,10 @@ class ProductController extends Controller
             'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
             'description' => 'nullable|string',
             'sku' => 'required|string|unique:products,sku,' . $product->id,
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
-            'image' => 'nullable|image',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'boolean',
         ]);
 
@@ -135,7 +150,11 @@ class ProductController extends Controller
         $product->save();
 
         return redirect()->route('products.index')
-            ->with('successMessage', 'Data Berhasil Disimpan');
+            ->with(
+                [
+                    'successMessage' => 'Data Berhasil Diupdate'
+                ]
+            );
     }
 
     /**

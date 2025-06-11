@@ -3,51 +3,92 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Categories;
 use Illuminate\Http\Request;
+
+use App\Models\Categories;
 use App\Http\Resources\ProductCategoryResource;
 
 class ProductCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $categories = Categories::latest()->paginate(10);
+        $categories = Categories::latest()->paginate(2);
 
-        return new ProductCategoryResource(true, 'List Data Product Category', $categories);
+        return new ProductCategoryResource($categories, 200, 'List Data Product Category');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:product_categories,slug',
+            'description' => 'required'
+        ]);
+
+        //check if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $category = new Categories;
+        $category->name = $request->name;
+        $category->slug = $request->slug;
+        $category->description = $request->description;
+        
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
+            $category->image = $imagePath;
+        }
+
+        $category->save();
+
+        return new ProductCategoryResource($category, 201, 'Product Category Created Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Categories $categories)
+    public function show($id)
     {
-        //
+        $category = Categories::findOrFail($id);
+
+        return new ProductCategoryResource($category, 200, 'Product Category Details', );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Categories $categories)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+            'description' => 'required'
+        ]);
+
+        //check if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $category = Categories::find($id);
+        $category->name = $request->name;
+        $category->slug = $request->slug;
+        $category->description = $request->description;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
+            $category->image = $imagePath;
+        }
+
+        $category->save();
+
+        return new ProductCategoryResource($category, 201, 'Product Category Updated Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Categories $categories)
+    public function destroy($id)
     {
-        //
+        $category = Categories::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['success' => true, 'message' => 'Product Category Deleted Successfully']);
     }
 }

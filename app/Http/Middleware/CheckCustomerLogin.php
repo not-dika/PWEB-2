@@ -15,9 +15,11 @@ class CheckCustomerLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Periksa apakah ada customer yang sudah login (misalnya, session aktif)
         if (auth()->guard('customer')->check()) {
-            return redirect()->route('home');
+            return redirect()->route('home'); // Redirect ke halaman home atau profile customer
         }
-        return $next($request);
+
+        return $next($request); // Jika sudah login, lanjutkan ke route berikutnya
     }
 }

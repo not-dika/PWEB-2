@@ -1,7 +1,7 @@
-<x-layouts.app :title="__('Edit Theme')">
+<x-layouts.app :title="__('Themes')">
     <div class="relative mb-6 w-full">
         <flux:heading size="xl">Edit Theme</flux:heading>
-        <flux:subheading size="lg" class="mb-6">Manage data Themes</flux:subheading>
+        <flux:subheading size="lg" class="mb-6">Update data Theme</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
 
@@ -11,39 +11,26 @@
         <flux:badge color="red" class="mb-3 w-full">{{ session()->get('errorMessage') }}</flux:badge>
     @endif
 
-    <form action="{{ route('themes.update', $theme) }}" method="post">
+    <form action="{{ route('themes.update', $theme->id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+        
+        <flux:input label="Name" name="name" class="mb-3" :value="old('name', $theme->name)" />
 
-        <flux:input label="Name" name="name" value="{{ $theme->name }}" class="mb-3" />
-        @error('name')
-            <flux:badge color="red" class="mb-3 w-full">{{ $message }}</flux:badge>
-        @enderror
+        <flux:textarea label="Description" name="description" class="mb-3">{{ old('description', $theme->description) }}</flux:textarea>
 
-        <flux:textarea label="Description" name="description" class="mb-3">{{ $theme->description }}</flux:textarea>
-        @error('description')
-            <flux:badge color="red" class="mb-3 w-full">{{ $message }}</flux:badge>
-        @enderror
+        <flux:input label="Folder" name="folder" class="mb-3" :value="old('folder', $theme->folder)" />
 
-        <flux:input label="Folder" name="folder" value="{{ $theme->folder }}" class="mb-3" />
-        @error('folder')
-            <flux:badge color="red" class="mb-3 w-full">{{ $message }}</flux:badge>
-        @enderror
-
-        <flux:select label="Status" name="status" class="mb-3">
-            <option value="">Select Status</option>
-            <option value="active" {{ $theme->status == 'active' ? 'selected' : '' }}>Active</option>
-            <option value="inactive" {{ $theme->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+        <flux:select label="Status" name="status" class="mb-6">
+            <flux:select.option value="active">Active</flux:select.option>
+            <flux:select.option value="inactive">Inactive</flux:select.option>
         </flux:select>
-        @error('status')
-            <flux:badge color="red" class="mb-3 w-full">{{ $message }}</flux:badge>
-        @enderror
 
         <flux:separator />
 
         <div class="mt-4">
-            <flux:button type="submit" variant="primary">Save</flux:button>
-            <flux:link href="{{ route('themes.index') }}" variant="ghost" class="ml-3">Back</flux:link>
+            <flux:button type="submit" variant="primary">Update</flux:button>
+            <flux:link href="{{ route('themes.index') }}" variant="ghost" class="ml-3">Kembali</flux:link>
         </div>
     </form>
 </x-layouts.app>
