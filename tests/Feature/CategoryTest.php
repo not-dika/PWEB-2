@@ -2,8 +2,11 @@
 
 use App\Models\Categories;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use function pest\Laravel\actingAs;
 use function pest\Laravel\get;
+
+uses(RefreshDatabase::class);
 
 test('admin user can access product categories page', function () {
 
