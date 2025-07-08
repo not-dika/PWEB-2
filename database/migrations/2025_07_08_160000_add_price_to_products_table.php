@@ -11,9 +11,11 @@ class AddPriceToProductsTable extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->decimal('price', 10, 2)->default(0)->after('sku');
-        });
+        if (!Schema::hasColumn('products', 'price')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->decimal('price', 10, 2)->default(0)->after('sku');
+            });
+        }
     }
 
     /**

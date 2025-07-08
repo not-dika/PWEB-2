@@ -11,9 +11,11 @@ class AddStockToProductsTable extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('stock')->default(0)->after('product_category_id');
-        });
+        if (!Schema::hasColumn('products', 'stock')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->integer('stock')->default(0)->after('product_category_id');
+            });
+        }
     }
 
     /**
