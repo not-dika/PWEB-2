@@ -64,35 +64,31 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-group mb-3">
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <div>
-                                    <h6 class="my-0">Nama Produk</h6>
-                                    <small class="text-muted">Deskripsi singkat</small>
-                                </div>
-                                <span class="text-muted">Rp12.000</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <div>
-                                    <h6 class="my-0">Produk Kedua</h6>
-                                    <small class="text-muted">Deskripsi singkat</small>
-                                </div>
-                                <span class="text-muted">Rp8.000</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Subtotal</span>
-                                <strong>Rp20.000</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Ongkir</span>
-                                <strong>Rp5.000</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total</span>
-                                <strong>Rp25.000</strong>
-                            </li>
-                        </ul>
+    @foreach ($items as $item)
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">{{ $item->itemable->name }}</h6>
+                <small class="text-muted">Qty: {{ $item->quantity }}</small>
+            </div>
+            <span class="text-muted">Rp{{ number_format($item->itemable->price * $item->quantity, 0, ',', '.') }}</span>
+        </li>
+    @endforeach
+
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Subtotal</span>
+        <strong>Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Ongkir</span>
+        <strong>Rp{{ number_format($shipping, 0, ',', '.') }}</strong>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Total</span>
+        <strong>Rp{{ number_format($total, 0, ',', '.') }}</strong>
+    </li>
+</ul>
                         <div class="alert alert-info mt-3" role="alert">
-                            Gratis ongkir untuk pesanan di atas Rp50.000!
+                            Gratis ongkir untuk pesanan di atas Rp1.000.000!
                         </div>
                     </div>
                 </div>

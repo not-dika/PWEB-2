@@ -48,6 +48,9 @@
                         Created At
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Sync Status
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Actions
                     </th>
                 </tr>
@@ -63,7 +66,7 @@
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
                                 @if($category->image)
-                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" class="h-10 w-10 object-cover rounded">
+                                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="h-10 w-10 object-cover rounded">
                                 @else
                                     <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded">
                                         <span class="text-gray-500 text-sm">N/A</span>
@@ -90,6 +93,20 @@
                             <p class="text-gray-900 whitespace-no-wrap">
                                 {{ $category->created_at }}
                             </p>
+                        </td>
+                        <td class="px-5 py-5 border-b bg-white border-gray-200 text-sm">
+                            <form id="sync-category-{{ $category->id }}" action="{{ route('category.sync', $category->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="is_active" value="{{ $category->hub_category_id ? 1 : 0 }}">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox"
+                                        name="switch"
+                                        onchange="document.getElementById('sync-category-{{ $category->id }}').submit()"
+                                        {{ $category->hub_category_id ? 'checked' : '' }}
+                                        class="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="ml-2 text-sm text-gray-900">{{ $category->hub_category_id ? 'Active' : 'Inactive' }}</span>
+                                </label>
+                            </form>
                         </td>
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 

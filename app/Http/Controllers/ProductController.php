@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
@@ -13,15 +13,15 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // Mendapatkan query pencarian
+                                     // Mendapatkan query pencarian
         $q = $request->get('q', ''); // Menangani parameter pencarian dengan default kosong
 
         // Mencari produk berdasarkan nama dan deskripsi jika ada pencarian
         $products = Product::when($q, function ($query, $q) {
             return $query->where('name', 'like', "%{$q}%")
-                         ->orWhere('description', 'like', "%{$q}%");
+                ->orWhere('description', 'like', "%{$q}%");
         })->paginate(10); // Menampilkan hasil produk dengan pagination
-        
+
         return view('dashboard.products.index', compact('products', 'q'));
     }
 
@@ -31,7 +31,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        return view('dashboard.products.create', compact('categories')); 
+        return view('dashboard.products.create', compact('categories'));
     }
 
     /**
@@ -41,39 +41,39 @@ class ProductController extends Controller
     {
         // Validasi input produk
         $validator = \Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug',
-            'sku' => 'required|string|unique:products,sku',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'name'                => 'required|string|max:255',
+            'slug'                => 'required|string|max:255|unique:products,slug',
+            'sku'                 => 'required|string|unique:products,sku',
+            'price'               => 'required|numeric|min:0',
+            'stock'               => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Validasi gambar upload
+            'description'         => 'nullable|string',
+            'image'               => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Validasi gambar upload
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->with(
                 [
-                    'errors' => $validator->errors(),
-                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu'
+                    'errors'       => $validator->errors(),
+                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu',
                 ]
             );
         }
 
-        $product = new Product;
-        $product->name = $request->name;
-        $product->slug = $request->slug;
-        $product->description = $request->description;
-        $product->sku = $request->sku;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
+        $product                      = new Product;
+        $product->name                = $request->name;
+        $product->slug                = $request->slug;
+        $product->description         = $request->description;
+        $product->sku                 = $request->sku;
+        $product->price               = $request->price;
+        $product->stock               = $request->stock;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
+        $product->is_active           = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
+            $image              = $request->file('image');
+            $imageName          = time() . '_' . $image->getClientOriginalName();
+            $imagePath          = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
 
@@ -81,7 +81,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with(
             [
-                'success' => 'Produk berhasil ditambahkan.'
+                'success' => 'Produk berhasil ditambahkan.',
             ]
         );
     }
@@ -99,7 +99,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product    = Product::findOrFail($id);
         $categories = Categories::all();
 
         return view('dashboard.products.edit', compact('product', 'categories'));
@@ -113,37 +113,37 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $validator = \Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
-            'description' => 'nullable|string',
-            'sku' => 'required|string|unique:products,sku,' . $product->id,
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'name'                => 'required|string|max:255',
+            'slug'                => 'required|string|max:255|unique:products,slug,' . $product->id,
+            'description'         => 'nullable|string',
+            'sku'                 => 'required|string|unique:products,sku,' . $product->id,
+            'price'               => 'required|numeric|min:0',
+            'stock'               => 'required|integer|min:0',
             'product_category_id' => 'nullable|exists:product_categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_active' => 'boolean',
+            'image'               => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_active'           => 'boolean',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->with(
                 [
-                    'errors' => $validator->errors(),
-                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu'
+                    'errors'       => $validator->errors(),
+                    'errorMessage' => 'Validasi Error, Silahkan lengkapi data terlebih dahulu',
                 ]
             );
         }
 
-        $product->name = $request->name;
-        $product->slug = $request->slug;
-        $product->description = $request->description;
-        $product->sku = $request->sku;
+        $product->name                = $request->name;
+        $product->slug                = $request->slug;
+        $product->description         = $request->description;
+        $product->sku                 = $request->sku;
         $product->product_category_id = $request->product_category_id;
-        $product->is_active = $request->has('is_active') ? $request->is_active : true;
+        $product->is_active           = $request->has('is_active') ? $request->is_active : true;
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
+            $image              = $request->file('image');
+            $imageName          = time() . '_' . $image->getClientOriginalName();
+            $imagePath          = $image->storeAs('uploads/products', $imageName, 'public');
             $product->image_url = $imagePath;
         }
 
@@ -152,7 +152,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with(
                 [
-                    'successMessage' => 'Data Berhasil Diupdate'
+                    'successMessage' => 'Data Berhasil Diupdate',
                 ]
             );
     }
@@ -169,4 +169,33 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('successMessage', 'Data Berhasil Dihapus');
     }
+
+    public function sync($id, Request $request)
+    {
+        $product = Product::findOrFail($id);
+
+        $response = Http::post('https://api.phb-umkm.my.id/api/product/sync', [
+            'client_id'         => env('CLIENT_ID'),
+            'client_secret'     => env('CLIENT_SECRET'),
+            'seller_product_id' => (string) $product->id,
+            'name'              => $product->name,
+            'description'       => $product->description,
+            'price'             => $product->price,
+            'stock'             => $product->stock,
+            'sku'               => $product->sku,
+            'image_url'         => $product->image_url,
+            'weight'            => $product->weight,
+            'is_active'         => $request->is_active == 1 ? false : true,
+            'category_id'       => (string) $product->category->hub_category_id,
+        ]);
+
+        if ($response->successful() && isset($response['product_id'])) {
+            $product->hub_product_id = $request->is_active == 1 ? null : $response['product_id'];
+            $product->save();
+        }
+
+        session()->flash('successMessage', 'Product Synced Successfully');
+        return redirect()->back();
+    }
+
 }

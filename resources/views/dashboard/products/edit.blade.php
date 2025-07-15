@@ -44,7 +44,11 @@
 
         <flux:input type="file" label="Image" name="image" class="mb-3" />
 
-        <flux:checkbox label="Active" class="mb-6" name="is_active" {{ $product->is_active ? 'checked' : '' }} />
+        {{-- Komponen Checkbox Flux tidak ada, menggunakan HTML standar --}}
+        <input type="hidden" name="is_active" value="0">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ $product->is_active ? 'checked' : '' }}>
+        <label for="is_active">Active</label>
+
 
         <flux:separator variant="subtle" />
 

@@ -48,6 +48,11 @@
                         PRICE
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        STOCK
+                    </th>
+                    <th Class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Sync Status</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Active
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -69,7 +74,7 @@
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
                                 @if($product->image_url)
-                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
+                                    <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
                                 @else
                                     <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded">
                                         <span class="text-gray-500 text-sm">N/A</span>
@@ -97,6 +102,26 @@
                                 {{ $product->price }}
                             </p>
                         </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                                {{ $product->stock }}
+                            </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm relative z-10">
+                            <form id="sync-product-{{ $product->id }}" action="{{ route('products.sync', $product->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="is_active" value="{{ $product->hub_product_id ? 1 : 0 }}">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox"
+                                        name="switch"
+                                        onchange="document.getElementById('sync-product-{{ $product->id }}').submit()"
+                                        {{ $product->hub_product_id ? 'checked' : '' }}
+                                        class="form-checkbox h-5 w-5 text-green-500 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="ml-2 text-gray-900">{{ $product->hub_product_id ? 'Active' : 'Inactive' }}</span>
+                                </label>
+                            </form>
+                        </td>
+
                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <p class="text-gray-900 whitespace-no-wrap">
                                 {{ $product->is_active ? 'Yes' : 'No' }}
