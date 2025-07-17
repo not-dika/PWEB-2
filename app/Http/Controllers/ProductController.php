@@ -192,9 +192,10 @@ class ProductController extends Controller
         if ($response->successful() && isset($response['product_id'])) {
             $product->hub_product_id = $request->is_active == 1 ? null : $response['product_id'];
             $product->save();
+            session()->flash('successMessage', 'Product Synced Successfully Response: ' . json_encode($response->json()));
+            return redirect()->back();
         }
-
-        session()->flash('successMessage', 'Product Synced Successfully');
+        session()->flash('errorMessage', 'Failed to sync product. Status: ' . $response->status() . '. Body: ' . $response->body());
         return redirect()->back();
     }
 
