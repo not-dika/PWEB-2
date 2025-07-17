@@ -1,149 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <title>{{ $title ?? ''}}</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title ?? 'Edi Shop - Komputer & Komponen' }}</title>
 
-   {{ $style ?? '' }}
+    <meta name="description" content="Edi Shop adalah toko online terpercaya untuk membeli komputer, CPU, GPU, monitor, dan aksesoris komputer dengan harga terbaik.">
+    <meta name="keywords" content="komputer, GPU, CPU, monitor, toko online, e-commerce">
 
-   <style>
-      .category-card {
-            transition: transform 0.3s;
-            height: 100%;
-      }
-      .category-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-      }
-      .category-img {
-            height: 120px;
-            object-fit: cover;
-      }
-      .card-body {
-            padding: 0.75rem;
-      }
-      .card-title {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-      }
-      .card-text {
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-      }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-      }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-      .product-card {
-            transition: transform 0.3s;
-            height: 100%;
-      }
-      .product-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-      }
-      .product-img {
-            height: 120px;
-            object-fit: cover;
-      }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-      }
-      .rating {
-            color: #ffc107;
-            font-size: 0.85rem;
-      }
+    {{ $style ?? '' }}
 
-      .cart-item {
-            border-bottom: 1px solid #dee2e6;
-            padding: 0.75rem 0;
-      }
-      .cart-img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-      }
-      .cart-item-name {
-            font-size: 1rem;
-            font-weight: 500;
-      }
-      .cart-item-price, .cart-item-subtotal {
-            font-size: 0.85rem;
-      }
-      .btn-sm {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-      }
-      .quantity-input {
-            width: 60px;
-            font-size: 0.85rem;
-            padding: 0.25rem;
-      }
-      .total-section {
-            font-size: 1rem;
-      }
-      @media (max-width: 576px) {
-            .cart-img {
-                  width: 60px;
-                  height: 60px;
-            }
-            .cart-item-name {
-                  font-size: 0.9rem;
-            }
-            .cart-item-price, .cart-item-subtotal {
-                  font-size: 0.8rem;
-            }
-            .quantity-input {
-                  width: 50px;
-            }
-      }
-   </style>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f6f8;
+            color: #333;
+            padding-top: 70px;
+        }
+        main {
+            background-color: #f5f6f8;
+            min-height: 80vh;
+        }
+        .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .content-section {
+            padding: 2rem 0;
+        }
+
+        /* Footer Styling */
+        footer {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: #d1d5db;
+        }
+        footer a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: #ffffff;
+        }
+        footer h5, footer h6 {
+            color: #ffffff;
+        }
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .social-icons a {
+            color: #d1d5db;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .social-icons a:hover {
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-  
+
       <x-navbar themeFolder="theme.default"></x-navbar>
 
-      <div class="container-fluid py-4">
-            {{  $slot }}
-      </div>
+    <!-- Konten Halaman -->
+    <main>
+        <div class="container-fluid">
+            {{ $slot }}
+        </div>
+    </main>
 
-      <footer class="bg-dark text-white pt-4 mt-5" style="background: linear-gradient(90deg, #201E1E 0%, #232323 100%);">
-            <div class="container p-3">
-                  <div class="row">
-                        <div class="col-md-6 mb-3">
-                              <h5 class="mb-3">Edi Shop</h5>
-                              <p class="small">Belanja mudah, cepat, dan aman di toko online kami. Temukan produk favorit Anda dengan harga terbaik.</p>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                              <h6 class="mb-3">Navigasi</h6>
-                              <ul class="list-unstyled">
-                                    <li><a href="#" class="text-white text-decoration-none">Beranda</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Produk</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Kategori</a></li>
-                                    <li><a href="#" class="text-white text-decoration-none">Kontak</a></li>
-                              </ul>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                              <h6 class="mb-3">Kontak Kami</h6>
-                              <ul class="list-unstyled small">
-                                    <li><i class="bi bi-envelope"></i> contact@edishop.xyz </li>
-                                    <li><i class="bi bi-telephone"></i> +62 8123 4567 8910</li>
-                                    <li><i class="bi bi-geo-alt"></i> Tegal, Indonesia</li>
-                              </ul>
-                        </div>
-                  </div>
-                  <hr class="bg-secondary">
-                  <div class="text-center pb-3">
-                        <small>© {{ date('Y') }} Ambatron LLC. All rights reserved.</small>
-                  </div>
+    <!-- Footer -->
+    <footer class="pt-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5 class="mb-3">Tentang Edi Shop</h5>
+                    <p class="small">
+                        Edi Shop adalah toko online yang menyediakan berbagai produk komputer dan komponen berkualitas seperti CPU, GPU, Monitor, dan Aksesoris. Belanja mudah, cepat, dan aman dengan harga terbaik.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-3">Navigasi</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="/">Beranda</a></li>
+                        <li><a href="/products">Produk</a></li>
+                        <li><a href="/categories">Kategori</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-3">Kontak Kami</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="bi bi-envelope me-2"></i> contact@edishop.xyz</li>
+                        <li><i class="bi bi-telephone me-2"></i> +62 8123 4567 8910</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> Tegal, Indonesia</li>
+                    </ul>
+                    <div class="social-icons mt-2">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                    </div>
+                </div>
             </div>
-      </footer>
+            <hr class="footer-divider">
+            <div class="text-center pb-3 small">
+                © {{ date('Y') }} Edi Shop LLC. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
-  
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
