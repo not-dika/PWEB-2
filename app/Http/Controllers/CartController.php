@@ -52,9 +52,11 @@ class CartController extends Controller
     public function remove($id)
     {
 
-        $product = Product::findOrFail($id);
+        $item = CartItem::where('id', $id)
+            ->where('cart_id', $this->cart->id)
+            ->firstOrFail();
 
-        $this->cart->removeItem($product);
+        $item->delete();
 
         return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
     }
@@ -62,14 +64,18 @@ class CartController extends Controller
     public function update($id, Request $request)
     {
 
-        $product = Product::findOrFail($id);
+        $item = CartItem::where('id', $id)
+            ->where('cart_id', $this->cart->id)
+            ->firstOrFail();
 
-        if ($request->action == 'decrease') {
-            $this->cart->decreaseQuantity(item: $product);
-        } else if ($request->action == 'increase') {
-            $this->cart->increaseQuantity(item: $product);
+        if ($request->action === 'increase') {
+            $item->quantity += 1;
+        } elseif ($request->action === 'decrease' && $item->quantity > 1) {
+            $item->quantity -= 1;
         }
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');
+        $item->save();
+
+        return redirect()->route('cart.index')->with('success', 'Cart updated.');
     }
 }

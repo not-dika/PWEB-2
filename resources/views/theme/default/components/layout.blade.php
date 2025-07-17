@@ -62,8 +62,7 @@
 </head>
 <body>
 
-    <!-- Slot untuk Komponen Navbar -->
-    <x-navbar themeFolder="{{ $themeFolder }}"></x-navbar>
+      <x-navbar themeFolder="theme.default"></x-navbar>
 
     <!-- Konten Halaman -->
     <main>

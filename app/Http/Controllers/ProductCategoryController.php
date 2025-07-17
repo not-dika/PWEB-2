@@ -188,7 +188,7 @@ class ProductCategoryController extends Controller
             $category->save();
         }
 
-        session()->flash('successMessage', 'Category Synced Successfully');
+        session()->flash('successMessage', 'Category Synced Successfully, Response: ' . json_encode($response->json()));
         return redirect()->back();
     }
 }
