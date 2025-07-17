@@ -20,7 +20,6 @@
                                     <div class="d-flex align-items-center">
                                         <form action="{{ route('cart.update', $item->id) }}" method="POST" class="d-inline-flex me-2">
                                             @csrf
-                                            @method('PATCH')
                                             <button type="submit" name="action" value="decrease" class="btn btn-outline-secondary btn-sm" {{ $item->quantity <= 1 ? 'disabled' : '' }}>-</button>
                                             <input type="text" name="quantity" value="{{ $item->quantity }}" class="form-control form-control-sm text-center mx-1" style="width: 50px;" readonly>
                                             <button type="submit" name="action" value="increase" class="btn btn-outline-secondary btn-sm">+</button>
@@ -30,7 +29,6 @@
 
                                         <form action="{{ route('cart.remove', $item->id) }}" method="POST" onsubmit="return confirm('Hapus item ini dari keranjang?')">
                                             @csrf
-                                            @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="bi bi-trash"></i> Hapus</button>
                                         </form>
                                     </div>
